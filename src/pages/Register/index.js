@@ -32,24 +32,25 @@ export default function Register(){
   }
 
   async function navigateToNext(){
-    try {
-      await api.post('/cliente', {
-        nome: name,
-        sobrenome: lastName,
-        email: email,
-        telefone: phone,
-        cep: cep,
-        cidade: city,
-        rua: street,
-        bairro: neighborhood,
-        numero: number,
-        senha: password
-      })
-      ToastAndroid.show("Conta criada com sucesso!", ToastAndroid.SHORT);
-      navigation.navigate('Home')
-    } catch (error) {
-      console.error(error);
-    }
+    navigation.navigate('RegisterCapabilities')
+
+    // try {
+    //   await api.post('/cliente', {
+    //     nome: name,
+    //     sobrenome: lastName,
+    //     email: email,
+    //     telefone: phone,
+    //     cep: cep,
+    //     cidade: city,
+    //     rua: street,
+    //     bairro: neighborhood,
+    //     numero: number,
+    //     senha: password
+    //   })
+    //   ToastAndroid.show("Conta criada com sucesso!", ToastAndroid.SHORT);
+    // } catch (error) {
+    //   console.error(error);
+    // }
   }
   return(
     <KeyboardAvoidingView style={styles.background} behavior="height">
