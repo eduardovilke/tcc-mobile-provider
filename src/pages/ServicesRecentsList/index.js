@@ -4,8 +4,9 @@ import {Feather, AntDesign, MaterialCommunityIcons, FontAwesome5} from '@expo/ve
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import styles from './styles';
+import categoryMap from '../../utils/categoryMap'
 
-// import api from '../services/api'
+import api from '../../services/api'
 
 export default function servicesRecentsList(){
 
@@ -13,28 +14,35 @@ export default function servicesRecentsList(){
   const [nameUser, setNameUser] = useState('')
 
   async function loadUser(){
-    const jsonValue = await AsyncStorage.getItem('@user')
-    console.log(jsonValue)
-    const user = jsonValue != null ? JSON.parse(jsonValue) : null;
 
+    const jsonValue = await AsyncStorage.getItem('@user')
+    const user = jsonValue != null ? JSON.parse(jsonValue) : null;
+    console.log(user)
     setNameUser(user.nome)
+
+    var newstr = user.tipos_servicos.replace('[', '');
+    var newstr2 = newstr.replace(']', '');
+
+    try {
+      const services = await api.get(`servico/0/${newstr2}`)
+
+      services.data.forEach(item => {
+        const service = [{
+          id: `${item.id}`,
+          category: categoryMap[`${item.tipos_servico_id}`],
+          description: item.descricao,
+          professional: item.prestador_id,
+          situation: item.situacao_id
+        }]
+        setData(data => data.concat(service))
+      })
+
+    } catch (error) {
+      console.log(error)
+    }
   }
-  // async function loadService(){
-  //   const services = await api.get(`servico/${props.user.id}`)
-  //   services.data.forEach(item => {
-  //     const service = [{
-  //       id: `${item.id}`,
-  //       category: categoryMap[`${item.tipos_servico_id}`],
-  //       description: item.descricao,
-  //       professional: item.prestador_id,
-  //       situation: item.situacao_id
-  //     }]
-  //     setData(data => data.concat(service))
-  //   })
-  // }
 
   useEffect(() => {
-    // loadService()
     loadUser()
   }, [])
   
@@ -49,7 +57,7 @@ export default function servicesRecentsList(){
         </Text>
       </View>
 
-      {/* <FlatList
+      <FlatList
         data={data}
         style={styles.serviceList}
         showsVerticalScrollIndicator={false}
@@ -82,7 +90,7 @@ export default function servicesRecentsList(){
           </View>
           
         )}
-      /> */}
+      />
     </View>
   )
 }
