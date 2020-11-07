@@ -7,6 +7,8 @@ import { Item, Input } from 'native-base';
 
 import styles from './styles';
 
+import api from '../../services/api'
+
 export default function Login(){
 
   const [hidePassword, setHidePassword] = useState(true);
@@ -21,6 +23,27 @@ export default function Login(){
 
   function navigateToHome(){
     navigation.navigate('Home');
+  }
+
+  async function handleSignInPress(){
+    if(!email || !password){
+      ToastAndroid.show("E-mail e senha deve ser preenchido.", ToastAndroid.SHORT);
+    }else{
+      try {
+        const response = await api.post('/sessions', {
+          email: email,
+          senha: password
+        })
+
+        const jsonValue = JSON.stringify(response.data.user[0])
+        await AsyncStorage.setItem('@user', jsonValue)
+                
+        navigation.navigate('Feed')
+          
+      } catch (error) {
+        ToastAndroid.show("E-mail ou senha inválidos.", ToastAndroid.SHORT);
+      }
+    }
   }
 
     return(
@@ -59,6 +82,7 @@ export default function Login(){
           <View style={styles.footer}>
             <Text style={styles.forgotPassword}>Esqueci minha senha</Text>
             <TouchableOpacity 
+              onPress={handleSignInPress}
             >
                 <AntDesign name="rightcircle" size={48} color="#4b5c6b"/>
             </TouchableOpacity>
