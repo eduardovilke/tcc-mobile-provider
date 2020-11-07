@@ -7,7 +7,9 @@ import { CheckBox, ListItem } from 'native-base';
 import styles from './styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export default function RegisterCapabilities(){
+import api from '../../services/api'
+
+export default function RegisterCapabilities({ route }){
 
   const [checked1, setChecked1] = useState(false);
   function setCheck1(){
@@ -57,7 +59,29 @@ export default function RegisterCapabilities(){
     if(checked5){
       arrayT.push(5)
     }
-    console.log('Valores que foram selecionados: ', arrayT)
+    
+    const data = {
+      nome: route.params.name,
+      sobrenome: route.params.lastName,
+      email: route.params.email,
+      telefone: route.params.phone,
+      cep: route.params.cep,
+      cidade: route.params.city,
+      rua: route.params.street,
+      bairro: route.params.neighborhood,
+      numero: route.params.number,
+      senha: route.params.password,
+      tipo_usuario: "2",
+      tipos_servicos: JSON.stringify(arrayT)
+    }
+
+    console.log('DATA ', data)
+
+    try {
+      await api.post('usuario', data)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return(
