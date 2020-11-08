@@ -2,6 +2,9 @@ import * as React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 import ServicesRecentsList from '../ServicesRecentsList/index';
+import ServicesRecentListStackScreen from '../ServicesRecentListStackScreen';
+
+const ServicesRecentListRoute = () => <ServicesRecentListStackScreen />;
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -19,7 +22,7 @@ export default function Feed(){
     >
       <Tab.Screen
         name="Início"
-        component={ServicesRecentsRoute}
+        component={ServicesRecentListRoute}
         options={{
           tabBarIcon: 'home',
         }}

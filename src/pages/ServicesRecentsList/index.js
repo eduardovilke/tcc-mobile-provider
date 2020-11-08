@@ -8,7 +8,7 @@ import categoryMap from '../../utils/categoryMap'
 
 import api from '../../services/api'
 
-export default function servicesRecentsList(){
+export default function servicesRecentsList({ navigation }){
 
   const [data, setData] = useState([])
   const [nameUser, setNameUser] = useState('')
@@ -17,7 +17,6 @@ export default function servicesRecentsList(){
 
     const jsonValue = await AsyncStorage.getItem('@user')
     const user = jsonValue != null ? JSON.parse(jsonValue) : null;
-    console.log(user)
     setNameUser(user.nome)
 
     var newstr = user.tipos_servicos.replace('[', '');
@@ -40,6 +39,10 @@ export default function servicesRecentsList(){
     } catch (error) {
       console.log(error)
     }
+  }
+
+  function navigateToInformations(){
+    navigation.navigate('ServiceInformation')
   }
 
   useEffect(() => {
@@ -78,13 +81,12 @@ export default function servicesRecentsList(){
             
             <Text style={styles.serviceProperty}>Descrição</Text>
             <Text style={styles.serviceValue}>{item.description}</Text>
-
-            <Text style={styles.serviceProperty}>Profissional</Text>
-            <Text style={styles.serviceValue}>{item.professional}</Text>
+            
             <TouchableOpacity 
-              style={styles.detailsButton} 
+              style={styles.detailsButton}
+              onPress={navigateToInformations}
             >
-              <Text style={styles.detailsButtonText} >Chat</Text>
+              <Text style={styles.detailsButtonText} >Ver informações</Text>
               <Feather name="arrow-right" size={17} color="#4fb4c8"/>
             </TouchableOpacity>
           </View>

@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import RegisterCapabilities from './pages/RegisterCapabilities'
 import Feed from './pages/Feed';
+import ServicesRecentListStackScreen from './pages/ServicesRecentListStackScreen'
 
 const Stack = createStackNavigator();
 
@@ -25,6 +26,7 @@ export default function routes(){
         <Stack.Screen name="Register" component={Register}/>
         <Stack.Screen name="RegisterCapabilities" component={RegisterCapabilities}/>
         <Stack.Screen name="Feed" component={Feed}/>
+        <Stack.Screen name="ServicesRecentListStackScreen" component={ServicesRecentListStackScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   )
