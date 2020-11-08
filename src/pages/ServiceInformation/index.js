@@ -1,18 +1,61 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Feather, FontAwesome } from '@expo/vector-icons';
 
 import styles from './styles'
 
-export default function ServiceInformation({ navigation }){
+import api from '../../services/api'
+
+export default function ServiceInformation({ navigation, route }){
+  const [nameClient, setNameClient] = useState('')
+  const [lastNameClient, setLastNameClient] = useState('')
+  const [city, setCity] = useState('')
+  const [neighborhood, setNeighborhood] = useState('')
+  const [street, setStreet] = useState('')
+  const [number, setNumber] = useState('')
+
   function navigateToBack(){
-    navigation.navigate('Feed')
+    navigation.navigate('ServicesRecentList')
   }
+
+  async function loadClient(){
+    try {
+      const response = await api.get(`usuario/${route.params.item.cliente_id}`)
+      setNameClient(response.data.nome)
+      setLastNameClient(response.data.sobrenome)
+      setCity(response.data.cidade)
+      setNeighborhood(response.data.bairro)
+      setStreet(response.data.rua)
+      setNumber(response.data.numero)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function changedService(){
+    const jsonValue = await AsyncStorage.getItem('@user')
+    const user = jsonValue != null ? JSON.parse(jsonValue) : null;
+
+    try {
+      const response = await api.put(`servico/${route.params.item.id}`, {
+        situacao_id: "2",
+        prestador_id: `${user.id}`
+      })
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    loadClient();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Feather style={styles.headerIcon} 
+        <Feather style={styles.headerIcon}
           name="arrow-left" 
           size={30} 
           color="#4b5c6b"
@@ -26,30 +69,31 @@ export default function ServiceInformation({ navigation }){
           Título
         </Text>
         <Text styles={styles.titleAbout}>
-            Torneira com muito vazamento
+            {route.params.item.name}
         </Text>
 
         <Text style={styles.description}>
           Informações         
         </Text>
         <Text styles={styles.descriptionAbout}>
-          Minha torneira está com muito vazamento, 
-          preciso de ajudaaaa
+          {route.params.item.description}
         </Text>
 
         <Text style={styles.client}>
           Cliente
         </Text>
         <Text styles={styles.clientName}>
-          Nome: Eduardo Vilke
+          Nome: {`${nameClient} ${lastNameClient}`}
         </Text>
         <Text styles={styles.clientAddress}>
-          Endereço: Chapecó, São Cristóvão,
-          Rua Olavo Bilac, 410E
+          Endereço: {`${city}, ${neighborhood}, ${street}, ${number}`}
         </Text>
 
         <View style={styles.buttons}>
-          <TouchableOpacity style={styles.getService}>
+          <TouchableOpacity 
+            style={styles.getService}
+            onPress={changedService}
+          >
             <Text style={styles.textGetService}>
               Pegar serviço
             </Text>

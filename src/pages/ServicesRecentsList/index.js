@@ -14,7 +14,7 @@ export default function servicesRecentsList({ navigation }){
   const [nameUser, setNameUser] = useState('')
 
   async function loadUser(){
-
+    setData([])
     const jsonValue = await AsyncStorage.getItem('@user')
     const user = jsonValue != null ? JSON.parse(jsonValue) : null;
     setNameUser(user.nome)
@@ -28,9 +28,11 @@ export default function servicesRecentsList({ navigation }){
       services.data.forEach(item => {
         const service = [{
           id: `${item.id}`,
+          name: item.nome,
           category: categoryMap[`${item.tipos_servico_id}`],
           description: item.descricao,
           professional: item.prestador_id,
+          cliente_id: item.cliente_id,
           situation: item.situacao_id
         }]
         setData(data => data.concat(service))
@@ -41,8 +43,8 @@ export default function servicesRecentsList({ navigation }){
     }
   }
 
-  function navigateToInformations(){
-    navigation.navigate('ServiceInformation')
+  function navigateToInformations(item){
+    navigation.navigate('ServiceInformation', {item})
   }
 
   useEffect(() => {
@@ -84,7 +86,7 @@ export default function servicesRecentsList({ navigation }){
             
             <TouchableOpacity 
               style={styles.detailsButton}
-              onPress={navigateToInformations}
+              onPress={() => navigateToInformations(item)}
             >
               <Text style={styles.detailsButtonText} >Ver informações</Text>
               <Feather name="arrow-right" size={17} color="#4fb4c8"/>
