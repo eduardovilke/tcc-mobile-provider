@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Feather, FontAwesome } from '@expo/vector-icons';
@@ -15,6 +15,7 @@ export default function ServiceInformation({ navigation, route }){
   const [neighborhood, setNeighborhood] = useState('')
   const [street, setStreet] = useState('')
   const [number, setNumber] = useState('')
+  const [phone, setPhone] = useState('')
 
   function navigateToBack(){
     navigation.navigate('ServicesRecentList')
@@ -29,6 +30,7 @@ export default function ServiceInformation({ navigation, route }){
       setNeighborhood(response.data.bairro)
       setStreet(response.data.rua)
       setNumber(response.data.numero)
+      setPhone(response.data.telefone)
     } catch (error) {
       console.log(error)
     }
@@ -48,6 +50,11 @@ export default function ServiceInformation({ navigation, route }){
       console.log(error)
     }
   }
+
+  function sendWhatsapp(){
+    Linking.openURL(`whatsapp://send?phone=55${phone}&text=Ola`);
+  }
+
   useEffect(() => {
     loadClient();
   }, []);
@@ -90,16 +97,31 @@ export default function ServiceInformation({ navigation, route }){
         </Text>
 
         <View style={styles.buttons}>
-          <TouchableOpacity 
-            style={styles.getService}
-            onPress={changedService}
-          >
-            <Text style={styles.textGetService}>
-              Pegar serviço
-            </Text>
-          </TouchableOpacity>
+          {
+            (route.params.item.situation != 1)
+            ? <TouchableOpacity 
+                style={styles.getServiceDisable}
+                onPress={changedService}
+                disabled={true}
+              >
+                <Text style={styles.textGetServiceDisable}>
+                  Agendado
+                </Text>
+              </TouchableOpacity>
 
-          <TouchableOpacity style={styles.zap}>
+            : <TouchableOpacity 
+                style={styles.getService}
+                onPress={changedService}
+              >
+                <Text style={styles.textGetService}>
+                  Pegar serviço
+                </Text>
+              </TouchableOpacity>
+          }
+          <TouchableOpacity 
+            style={styles.zap}
+            onPress={sendWhatsapp}
+          >
             <Text style={styles.textZap}>
               <FontAwesome name="whatsapp" size={20} color="white" />
             </Text>

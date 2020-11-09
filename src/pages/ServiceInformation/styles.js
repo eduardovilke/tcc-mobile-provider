@@ -65,5 +65,16 @@ export default StyleSheet.create({
   },
   textZap: {
     color: 'white'
+  },
+  getServiceDisable: {
+    backgroundColor: '#cccccc',
+    borderRadius: 7,
+    height: 44,
+    width: 115,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  textGetServiceDisable: {
+    color: '#666666'
   }
 })
