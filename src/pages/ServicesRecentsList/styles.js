@@ -60,5 +60,8 @@ export default StyleSheet.create({
     color: '#4fb4c8',
     fontSize: 15,
     fontWeight: 'bold',
+  },
+  void: {
+    height: 30
   }
 });
