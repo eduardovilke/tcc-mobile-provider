@@ -45,7 +45,7 @@ export default function ServiceInformation({ navigation, route }){
         situacao_id: "2",
         prestador_id: `${user.id}`
       })
-      console.log(response)
+      navigation.navigate('ServicesRecentList')
     } catch (error) {
       console.log(error)
     }
