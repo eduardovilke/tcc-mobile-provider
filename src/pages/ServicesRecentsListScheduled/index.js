@@ -11,7 +11,7 @@ import api from '../../services/api'
 
 const { forEach } = require('p-iteration');
 
-export default function servicesRecentsList({ navigation }){
+export default function servicesRecentsListScheduled({ navigation }){
 
   const [data, setData] = useState([])
   const [nameUser, setNameUser] = useState('')
@@ -30,7 +30,7 @@ export default function servicesRecentsList({ navigation }){
       setLoading(true)
       const services = await api.get(`servico/0/${newstr2}`)
       await forEach(services.data, async (item) => {
-        if(item.situacao_id == 1 || item.situacao_id == 3){
+        if(item.situacao_id == 2){
           const service = [{
             id: `${item.id}`,
             name: item.nome,

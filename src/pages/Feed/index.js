@@ -3,8 +3,10 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 
 import ServicesRecentsList from '../ServicesRecentsList/index';
 import ServicesRecentListStackScreen from '../ServicesRecentListStackScreen';
+import ServicesRecentListScheduledStackScreen from '../ServicesRecentListScheduledStackScreen';
 
 const ServicesRecentListRoute = () => <ServicesRecentListStackScreen />;
+const ServicesRecentListScheduledRoute = () => <ServicesRecentListScheduledStackScreen />;
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -29,7 +31,7 @@ export default function Feed(){
       />
       <Tab.Screen
         name="Agendados"
-        component={ServicesRecentsRoute}
+        component={ServicesRecentListScheduledRoute}
         options={{
           tabBarIcon: 'clock',
         }}
