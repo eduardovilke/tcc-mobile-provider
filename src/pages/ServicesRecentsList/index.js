@@ -29,6 +29,7 @@ export default function servicesRecentsList({ navigation }){
     try {
       setLoading(true)
       const services = await api.get(`servico/0/${newstr2}`)
+      services.data.reverse();
       await forEach(services.data, async (item) => {
         if(item.situacao_id == 1 || item.situacao_id == 3){
           const service = [{
@@ -74,7 +75,6 @@ export default function servicesRecentsList({ navigation }){
         ? 
           <ShimmerEffect />
         :  <FlatList
-            inverted
             data={data}
             style={styles.serviceList}
             showsVerticalScrollIndicator={false}
