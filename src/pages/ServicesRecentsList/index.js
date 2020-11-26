@@ -74,6 +74,7 @@ export default function servicesRecentsList({ navigation }){
         ? 
           <ShimmerEffect />
         :  <FlatList
+            inverted
             data={data}
             style={styles.serviceList}
             showsVerticalScrollIndicator={false}
