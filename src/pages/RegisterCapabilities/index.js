@@ -3,6 +3,7 @@ import {View, Text, KeyboardAvoidingView, ScrollView, ToastAndroid} from 'react-
 import {useNavigation} from '@react-navigation/native';
 import {Feather} from '@expo/vector-icons'
 import { CheckBox, ListItem } from 'native-base';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import styles from './styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -61,16 +62,16 @@ export default function RegisterCapabilities({ route }){
     }
     
     const data = {
-      nome: route.params.name,
-      sobrenome: route.params.lastName,
-      email: route.params.email,
-      telefone: route.params.phone,
-      cep: route.params.cep,
-      cidade: route.params.city,
-      rua: route.params.street,
-      bairro: route.params.neighborhood,
-      numero: route.params.number,
-      senha: route.params.password,
+      nome: `${route.params.name}`,
+      sobrenome: `${route.params.lastName}`,
+      email: `${route.params.email}`,
+      telefone: `${route.params.phone}`,
+      cep: `${route.params.cep}`,
+      cidade: `${route.params.city}`,
+      rua: `${route.params.street}`,
+      bairro: `${route.params.neighborhood}`,
+      numero: `${route.params.number}`,
+      senha: `${route.params.password}`,
       tipo_usuario: "2",
       tipos_servicos: JSON.stringify(arrayT)
     }
@@ -78,7 +79,22 @@ export default function RegisterCapabilities({ route }){
     console.log('DATA ', data)
 
     try {
-      await api.post('usuario', data)
+      const criaUser = await api.post('usuario', data)
+      console.log(criaUser)
+      const response = await api.post('/sessions', {
+        email: data.email,
+        senha: data.senha
+      })
+
+      const jsonValue = JSON.stringify(response.data.user[0])
+      await AsyncStorage.setItem('@user', jsonValue)
+              
+      ToastAndroid.show("Realizando Login!", ToastAndroid.SHORT);
+
+      navigation.navigate('Feed', {
+        user: response.data.user[0]
+      })
+      
     } catch (error) {
       console.log(error)
     }
