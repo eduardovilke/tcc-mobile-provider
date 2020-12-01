@@ -39,13 +39,14 @@ export default function servicesRecentsList({ navigation }){
             description: item.descricao,
             professional: item.prestador_id,
             cliente_id: item.cliente_id,
-            situation: item.situacao_id
+            situation: item.situacao_id,
+            descricao_avaliacao: item.descricao_avaliacao ? item.descricao_avaliacao : null,
+            nota_avaliacao: item.nota_avaliacao ? item.nota_avaliacao : null
           }]
           setData(data => data.concat(service))
           setLoading(false)
         }
       })
-      console.log(loading)
     } catch (error) {
       console.log(error)
     }
@@ -53,6 +54,10 @@ export default function servicesRecentsList({ navigation }){
 
   function navigateToInformations(item){
     navigation.navigate('ServiceInformation', {item})
+  }
+
+  function navigateToRating(item){
+    navigation.navigate('ServiceRating', {item})
   }
 
   useEffect(
@@ -97,14 +102,25 @@ export default function servicesRecentsList({ navigation }){
                 
                 <Text style={styles.serviceProperty}>Descrição</Text>
                 <Text style={styles.serviceValue}>{item.description}</Text>
+
+                {
+                  (item.situation == 3)
+                  ? <TouchableOpacity 
+                      style={styles.detailsButton}
+                      onPress={() => navigateToRating(item)}
+                    >
+                      <Text style={styles.detailsButtonText} >Ver avaliação</Text>
+                      <Feather name="arrow-right" size={17} color="#4fb4c8"/>
+                    </TouchableOpacity>
+                  : <TouchableOpacity 
+                      style={styles.detailsButton}
+                      onPress={() => navigateToInformations(item)}
+                    >
+                      <Text style={styles.detailsButtonText} >Ver informações</Text>
+                      <Feather name="arrow-right" size={17} color="#4fb4c8"/>
+                    </TouchableOpacity>
+                }
                 
-                <TouchableOpacity 
-                  style={styles.detailsButton}
-                  onPress={() => navigateToInformations(item)}
-                >
-                  <Text style={styles.detailsButtonText} >Ver informações</Text>
-                  <Feather name="arrow-right" size={17} color="#4fb4c8"/>
-                </TouchableOpacity>
               </View>
               
             )}
