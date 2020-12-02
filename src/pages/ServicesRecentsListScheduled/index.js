@@ -27,7 +27,6 @@ export default function servicesRecentsListScheduled({ navigation }){
     var newstr2 = newstr.replace(']', '');
 
     try {
-      setLoading(true)
       const services = await api.get(`servico/0/${newstr2}`)
       services.data.reverse();
       await forEach(services.data, async (item) => {
@@ -44,8 +43,10 @@ export default function servicesRecentsListScheduled({ navigation }){
           setData(data => data.concat(service))
           setLoading(false)
         }
+        if(data.length == 0 ){
+          setLoading(false)
+        }
       })
-      console.log(loading)
     } catch (error) {
       console.log(error)
     }
@@ -74,7 +75,7 @@ export default function servicesRecentsListScheduled({ navigation }){
         (loading)
         ? 
           <ShimmerEffect />
-        :  <FlatList
+        : (data) ? <FlatList
             data={data}
             style={styles.serviceList}
             showsVerticalScrollIndicator={false}
@@ -109,7 +110,7 @@ export default function servicesRecentsListScheduled({ navigation }){
               
             )}
           />
-         
+        : <View></View>
       }
       
     </View>
