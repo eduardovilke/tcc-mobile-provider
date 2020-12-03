@@ -26,9 +26,18 @@ export default function servicesRecentsListScheduled({ navigation }){
     var newstr = user.tipos_servicos.replace('[', '');
     var newstr2 = newstr.replace(']', '');
 
+    const jsonToken = await AsyncStorage.getItem('@token')
+    const token = jsonToken != null ? JSON.parse(jsonToken) : null;
+
     try {
-      const services = await api.get(`servico/0/${newstr2}`)
+      const services = await api.get(`servico/0/${newstr2}`, {
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
+      })
+
       services.data.reverse();
+      
       await forEach(services.data, async (item) => {
         if(item.situacao_id == 2){
           const service = [{

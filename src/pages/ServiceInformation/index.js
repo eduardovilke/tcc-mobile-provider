@@ -22,8 +22,16 @@ export default function ServiceInformation({ navigation, route }){
   }
 
   async function loadClient(){
+    const jsonToken = await AsyncStorage.getItem('@token')
+    const token = jsonToken != null ? JSON.parse(jsonToken) : null;
+
     try {
-      const response = await api.get(`usuario/${route.params.item.cliente_id}`)
+      const response = await api.get(`usuario/${route.params.item.cliente_id}`, {
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
+      })
+
       setNameClient(response.data.nome)
       setLastNameClient(response.data.sobrenome)
       setCity(response.data.cidade)
@@ -31,6 +39,7 @@ export default function ServiceInformation({ navigation, route }){
       setStreet(response.data.rua)
       setNumber(response.data.numero)
       setPhone(response.data.telefone)
+
     } catch (error) {
       console.log(error)
     }
@@ -40,10 +49,18 @@ export default function ServiceInformation({ navigation, route }){
     const jsonValue = await AsyncStorage.getItem('@user')
     const user = jsonValue != null ? JSON.parse(jsonValue) : null;
 
+    const jsonToken = await AsyncStorage.getItem('@token')
+    const token = jsonToken != null ? JSON.parse(jsonToken) : null;
+
     try {
-      const response = await api.put(`servico/${route.params.item.id}`, {
+      await api.put(`servico/${route.params.item.id}`, {
         situacao_id: "2",
         prestador_id: `${user.id}`
+      },
+      {
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
       })
       navigation.navigate('ServicesRecentList')
     } catch (error) {

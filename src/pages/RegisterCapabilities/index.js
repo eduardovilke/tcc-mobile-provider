@@ -76,8 +76,6 @@ export default function RegisterCapabilities({ route }){
       tipos_servicos: JSON.stringify(arrayT)
     }
 
-    console.log('DATA ', data)
-
     try {
       const criaUser = await api.post('usuario', data)
       console.log(criaUser)
@@ -88,7 +86,10 @@ export default function RegisterCapabilities({ route }){
 
       const jsonValue = JSON.stringify(response.data.user[0])
       await AsyncStorage.setItem('@user', jsonValue)
-              
+
+      const jsonValueToken = JSON.stringify(response.data.token.token)
+      await AsyncStorage.setItem('@token', jsonValueToken)
+      
       ToastAndroid.show("Realizando Login!", ToastAndroid.SHORT);
 
       navigation.navigate('Feed', {

@@ -18,6 +18,7 @@ export default function ServiceRating({ navigation, route }){
     navigation.navigate('ServicesRecentList')
   }
   async function loadInformations(){
+
     try {
       const response = await api.get(`usuario/${route.params.item.cliente_id}`)
       setNameClient(response.data.nome)
